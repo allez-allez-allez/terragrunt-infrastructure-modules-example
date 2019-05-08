@@ -171,7 +171,6 @@ resource "aws_security_group_rule" "asg_allow_http_inbound" {
 
 resource "aws_elb" "webserver_example" {
   name               = "${var.name}"
-  availability_zones = ["${module.vpc.azs}"]
   security_groups    = ["${aws_security_group.elb.id}"]
   subnets            = ["${module.vpc.public_subnets}"]
 
