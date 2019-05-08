@@ -73,12 +73,12 @@ module "vpc" {
 
 resource "aws_autoscaling_group" "webserver_example" {
   launch_configuration = "${aws_launch_configuration.webserver_example.id}"
-  availability_zones   = ["${data.aws_availability_zones.all.names}"]
+  availability_zones   = ["${module.vpc.azs}"]
 
   load_balancers    = ["${aws_elb.webserver_example.name}"]
   health_check_type = "ELB"
 
-  vpc_zone_identifier = "${module.vpc.vpc_id}"
+  vpc_zone_identifier = ["${module.vpc.vpc_id}"]
 
   min_size = "${var.min_size}"
   max_size = "${var.max_size}"
