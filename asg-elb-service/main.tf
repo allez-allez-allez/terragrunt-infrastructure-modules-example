@@ -100,10 +100,11 @@ data "aws_availability_zones" "all" {}
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_launch_configuration" "webserver_example" {
+  name            = "${var.project_name}-launch-configuration"
   image_id        = "${data.aws_ami.ubuntu.id}"
   instance_type   = "${var.instance_type}"
   security_groups = ["${aws_security_group.asg.id}"]
-  key_name = "${var.key_pair_name}"
+  key_name        = "${var.key_pair_name}"
 
   user_data = <<-EOF
               #!/bin/bash
@@ -111,11 +112,7 @@ resource "aws_launch_configuration" "webserver_example" {
               nohup busybox httpd -f -p "${var.server_port}" &
               EOF
 
-  tag {
-    key                 = "Name"
-    value               = "${var.project_name}-launch-config"
-    propagate_at_launch = true
-  }
+
   lifecycle {
     create_before_destroy = true
   }
@@ -175,9 +172,9 @@ resource "aws_security_group_rule" "asg_allow_http_inbound" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_elb" "webserver_example" {
-  name               = "${var.name}"
-  security_groups    = ["${aws_security_group.elb.id}"]
-  subnets            = ["${module.vpc.public_subnets}"]
+  name            = "${var.name}"
+  security_groups = ["${aws_security_group.elb.id}"]
+  subnets         = ["${module.vpc.public_subnets}"]
 
   listener {
     lb_port           = "${var.elb_port}"
