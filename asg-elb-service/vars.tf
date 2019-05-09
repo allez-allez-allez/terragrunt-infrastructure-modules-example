@@ -37,3 +37,7 @@ variable "elb_port" {
   description = "The port number the ELB should listen on for HTTP requests"
   default     = "80"
 }
+
+variable "key_pair_name" {
+  description = "The key pair name applies to the instance"
+}

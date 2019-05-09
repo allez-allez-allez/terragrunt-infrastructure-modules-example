@@ -103,7 +103,8 @@ resource "aws_launch_configuration" "webserver_example" {
   image_id        = "${data.aws_ami.ubuntu.id}"
   instance_type   = "${var.instance_type}"
   security_groups = ["${aws_security_group.asg.id}"]
-
+  key_name = "${var.key_pair_name}"
+  
   user_data = <<-EOF
               #!/bin/bash
               echo "Hello, World" > index.html
