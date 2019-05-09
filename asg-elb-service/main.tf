@@ -84,7 +84,7 @@ resource "aws_autoscaling_group" "webserver_example" {
 
   tag {
     key                 = "Name"
-    value               = "${var.name}"
+    value               = "${var.project_name}-asg"
     propagate_at_launch = true
   }
 }
@@ -104,13 +104,16 @@ resource "aws_launch_configuration" "webserver_example" {
   instance_type   = "${var.instance_type}"
   security_groups = ["${aws_security_group.asg.id}"]
   key_name = "${var.key_pair_name}"
-  
+
   user_data = <<-EOF
               #!/bin/bash
-              echo "Hello, World" > index.html
+              echo "Hello, World!" > index.html
               nohup busybox httpd -f -p "${var.server_port}" &
               EOF
 
+  tags = {
+    Name = "${var.project_name}-launchconfig"
+  }
   lifecycle {
     create_before_destroy = true
   }
