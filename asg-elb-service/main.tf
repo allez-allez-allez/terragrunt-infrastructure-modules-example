@@ -111,8 +111,10 @@ resource "aws_launch_configuration" "webserver_example" {
               nohup busybox httpd -f -p "${var.server_port}" &
               EOF
 
-  tags = {
-    Name = "${var.project_name}-launchconfig"
+  tag {
+    key                 = "Name"
+    value               = "${var.project_name}-launch-config"
+    propagate_at_launch = true
   }
   lifecycle {
     create_before_destroy = true
